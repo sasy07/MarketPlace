@@ -8,4 +8,8 @@
       <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.7" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\MarketPlace.DataLayer\MarketPlace.DataLayer.csproj" />
+    </ItemGroup>
+
 </Project>
