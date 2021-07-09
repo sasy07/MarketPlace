@@ -17,4 +17,8 @@
       <ProjectReference Include="..\MarketPlace.DataLayer\MarketPlace.DataLayer.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\css\site.css" />
+    </ItemGroup>
+
 </Project>
