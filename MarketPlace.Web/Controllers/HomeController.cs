@@ -9,7 +9,7 @@ using MarketPlace.Web.Models;
 
 namespace MarketPlace.Web.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : SiteBaseController
     {
         private readonly ILogger<HomeController> _logger;
 

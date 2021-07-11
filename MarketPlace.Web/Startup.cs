@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 using System.Threading.Tasks;
 using MarketPlace.Application.Services.Implementations;
 using MarketPlace.Application.Services.Interfaces;
 using MarketPlace.DataLayer.Context;
 using MarketPlace.DataLayer.Repository;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,12 +31,12 @@ namespace MarketPlace.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            #region config services
+
             services.AddControllersWithViews();
-
-            #region IoC
-
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IPasswordHelper, PasswordHelper>();
 
             #endregion
 
@@ -43,6 +46,31 @@ namespace MarketPlace.Web
             {
                 options.UseSqlServer(Configuration.GetConnectionString("MarketPlaceConnection"));
             });
+
+            #endregion
+
+            #region authentication
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            }).AddCookie(options =>
+            {
+                options.LoginPath = "/login";
+                options.LogoutPath = "/log-out";
+                options.ExpireTimeSpan = TimeSpan.FromDays(31);
+            });
+
+            #endregion
+
+            #region html encoder
+
+            services.AddSingleton<HtmlEncoder>
+            (
+                HtmlEncoder.Create(new[] {UnicodeRanges.Arabic, UnicodeRanges.BasicLatin})
+            );
 
             #endregion
         }
@@ -66,6 +94,7 @@ namespace MarketPlace.Web
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
