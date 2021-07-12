@@ -70,6 +70,18 @@ namespace MarketPlace.Application.Services.Implementations
                 .SingleOrDefaultAsync(u => u.Mobile == mobile);
         }
 
+        public async Task<ForgotPasswordResult> RecoverUserPassword(ForgotPasswordDTO forgot)
+        {
+            var user = await GetUserByMobile(forgot.Mobile);
+            if (user == null) return ForgotPasswordResult.NotFound;
+            string newPassword = new Random().Next(100000, 999999).ToString("N");
+            user.Password = _passwordHelper.EncodePasswordMd5(newPassword);
+            _userRepository.EditEntity(user);
+            //Todo Send SMS to User
+            await _userRepository.SaveChanges();
+            return ForgotPasswordResult.Success;
+        }
+
         #endregion
 
         #region dispose

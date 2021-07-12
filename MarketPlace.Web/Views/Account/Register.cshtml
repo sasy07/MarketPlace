@@ -2,9 +2,12 @@
 @{
     ViewData["Title"] = "عضویت";
 }
+
 @section scripts{
     <partial name="_JqueryValidators"/>
+    <partial name="_CaptchaScripts"/>
 }
+
 <!--breadcrumbs area start-->
 <div class="breadcrumbs_area">
     <div class="container">
@@ -33,6 +36,7 @@
                 <div class="account_form register">
                     <h2>@ViewData["Title"]</h2>
                     <form method="post" asp-controller="Account" asp-action="Register">
+                        <partial name="_CaptchaInput"/>
                         <p>
                             <label>نام<span>*</span></label>
                             <input asp-for="FirstName" type="text">

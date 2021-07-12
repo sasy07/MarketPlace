@@ -1,9 +1,11 @@
-﻿@model MarketPlace.DataLayer.DTOs.Account.LoginUserDTO
+﻿@using MarketPlace.DataLayer.DTOs.Site
+@model MarketPlace.DataLayer.DTOs.Account.LoginUserDTO
 @{
     ViewData["Title"] = "ورود";
 }
 @section scripts{
     <partial name="_JqueryValidators"/>
+    <partial name="_CaptchaScripts"/>
 }
 <!--breadcrumbs area start-->
 <div class="breadcrumbs_area">
@@ -33,6 +35,7 @@
                 <div class="account_form register">
                     <h2>@ViewData["Title"]</h2>
                     <form method="post" asp-controller="Account" asp-action="Login">
+                        <partial name="_CaptchaInput"/>
                         <p>
                             <label>موبایل <span>*</span></label>
                             <input asp-for="Mobile" type="text">
@@ -46,6 +49,10 @@
                         <div class="login_submit">
                             <button type="submit"> ورود</button>
                         </div>
+                        <hr/>
+                        <p>
+                            <a asp-controller="Account" asp-action="ForgotPassword">بازیابی کلمه عبور</a>
+                        </p>
                     </form>
                 </div>
             </div>
